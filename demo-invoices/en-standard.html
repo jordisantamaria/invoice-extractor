@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 40px; background: white; color: #333; width: 800px; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+  .company { }
+  .company h1 { margin: 0; font-size: 28px; color: #1a5276; }
+  .company p { margin: 2px 0; font-size: 13px; color: #666; }
+  .invoice-title { text-align: right; }
+  .invoice-title h2 { margin: 0; font-size: 36px; color: #1a5276; font-weight: 300; }
+  .invoice-title p { margin: 2px 0; font-size: 13px; color: #666; }
+  .addresses { display: flex; gap: 40px; margin-bottom: 30px; }
+  .addresses .box { flex: 1; }
+  .addresses .box h4 { margin: 0 0 5px; font-size: 11px; text-transform: uppercase; color: #999; letter-spacing: 1px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  th { background: #1a5276; color: white; padding: 10px; text-align: left; font-size: 13px; }
+  td { padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
+  .r { text-align: right; }
+  .totals-section { display: flex; justify-content: flex-end; }
+  .totals-table { width: 280px; }
+  .totals-table td { border: none; padding: 5px 10px; font-size: 14px; }
+  .totals-table tr:last-child { font-weight: bold; font-size: 18px; }
+  .totals-table tr:last-child td { border-top: 2px solid #1a5276; padding-top: 10px; }
+  .notes { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 13px; color: #666; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="company">
+      <h1>Pacific Digital Solutions</h1>
+      <p>1234 Innovation Drive, Suite 500</p>
+      <p>San Francisco, CA 94105</p>
+      <p>contact@pacificdigital.com</p>
+    </div>
+    <div class="invoice-title">
+      <h2>INVOICE</h2>
+      <p>Invoice #: PDS-2024-0387</p>
+      <p>Date: November 20, 2024</p>
+      <p>Due: December 20, 2024</p>
+    </div>
+  </div>
+
+  <div class="addresses">
+    <div class="box">
+      <h4>Bill To</h4>
+      <p><strong>Sakura Technologies Inc.</strong></p>
+      <p>789 Cherry Blossom Ave</p>
+      <p>Portland, OR 97201</p>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="r">Qty</th>
+        <th class="r">Rate</th>
+        <th class="r">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Web Application Development</td>
+        <td class="r">40 hrs</td>
+        <td class="r">$75.00</td>
+        <td class="r">$3,000.00</td>
+      </tr>
+      <tr>
+        <td>UI/UX Design</td>
+        <td class="r">15 hrs</td>
+        <td class="r">$65.00</td>
+        <td class="r">$975.00</td>
+      </tr>
+      <tr>
+        <td>Cloud Infrastructure Setup</td>
+        <td class="r">1</td>
+        <td class="r">$500.00</td>
+        <td class="r">$500.00</td>
+      </tr>
+      <tr>
+        <td>Technical Documentation</td>
+        <td class="r">5 hrs</td>
+        <td class="r">$55.00</td>
+        <td class="r">$275.00</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="totals-section">
+    <table class="totals-table">
+      <tr>
+        <td>Subtotal</td>
+        <td class="r">$4,750.00</td>
+      </tr>
+      <tr>
+        <td>Tax (0%)</td>
+        <td class="r">$0.00</td>
+      </tr>
+      <tr>
+        <td>Total</td>
+        <td class="r">$4,750.00</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="notes">
+    <p><strong>Payment Terms:</strong> Net 30</p>
+    <p>Please make payment via wire transfer to: Pacific Digital Solutions, Bank of America, Account #: XXXX-4567</p>
+    <p>Thank you for your business!</p>
+  </div>
+</body>
+</html>

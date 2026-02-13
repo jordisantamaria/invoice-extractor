@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; margin: 30px; background: white; color: #333; width: 800px; }
+  .top { border: 2px solid #333; padding: 15px; margin-bottom: 25px; }
+  .top h1 { text-align: center; margin: 0 0 10px; font-size: 24px; }
+  .top-grid { display: flex; justify-content: space-between; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 13px; }
+  th { background: #e8e8e8; padding: 8px; text-align: left; border: 1px solid #999; }
+  td { padding: 7px 8px; border: 1px solid #ccc; }
+  .r { text-align: right; }
+  .c { text-align: center; }
+  .discount { color: #c00; }
+  .subtotals { width: 350px; margin-left: auto; margin-top: 15px; }
+  .subtotals td { border: none; padding: 4px 10px; }
+  .subtotals .grand { font-size: 18px; font-weight: bold; border-top: 2px double #333; }
+  .footer { font-size: 12px; color: #666; margin-top: 25px; border-top: 1px solid #ccc; padding-top: 10px; }
+</style>
+</head>
+<body>
+  <div class="top">
+    <h1>請 求 書</h1>
+    <div class="top-grid">
+      <div>
+        <p><strong>宛先:</strong> 東京フィンテック株式会社 御中</p>
+        <p>〒100-0004 東京都千代田区大手町2-1-1</p>
+      </div>
+      <div style="text-align: right;">
+        <p>請求書番号: TF-2024-0892</p>
+        <p>発行日: 2024-12-01</p>
+        <p>支払期限: 2025-01-05</p>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size: 14px;"><strong>発行者:</strong> ITプロフェッショナル株式会社 ｜ 〒160-0023 東京都新宿区西新宿3-7-1 ｜ T9876543210987</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>品目・サービス内容</th>
+        <th class="c">数量</th>
+        <th class="r">単価</th>
+        <th class="r">値引</th>
+        <th class="r">小計</th>
+        <th class="c">税率</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="c">1</td>
+        <td>クラウドインフラ構築</td>
+        <td class="c">1式</td>
+        <td class="r">¥120,000</td>
+        <td class="r">-</td>
+        <td class="r">¥120,000</td>
+        <td class="c">10%</td>
+      </tr>
+      <tr>
+        <td class="c">2</td>
+        <td>API開発 (バックエンド)</td>
+        <td class="c">3人月</td>
+        <td class="r">¥80,000</td>
+        <td class="r">-</td>
+        <td class="r">¥240,000</td>
+        <td class="c">10%</td>
+      </tr>
+      <tr>
+        <td class="c">3</td>
+        <td>フロントエンド開発</td>
+        <td class="c">2人月</td>
+        <td class="r">¥75,000</td>
+        <td class="r discount">-¥15,000</td>
+        <td class="r">¥135,000</td>
+        <td class="c">10%</td>
+      </tr>
+      <tr>
+        <td class="c">4</td>
+        <td>セキュリティ診断</td>
+        <td class="c">1回</td>
+        <td class="r">¥50,000</td>
+        <td class="r">-</td>
+        <td class="r">¥50,000</td>
+        <td class="c">10%</td>
+      </tr>
+      <tr>
+        <td class="c">5</td>
+        <td>負荷テスト実施</td>
+        <td class="c">2回</td>
+        <td class="r">¥30,000</td>
+        <td class="r discount">-¥5,000</td>
+        <td class="r">¥55,000</td>
+        <td class="c">10%</td>
+      </tr>
+      <tr>
+        <td class="c">6</td>
+        <td>技術ドキュメント作成</td>
+        <td class="c">1式</td>
+        <td class="r">¥40,000</td>
+        <td class="r">-</td>
+        <td class="r">¥40,000</td>
+        <td class="c">10%</td>
+      </tr>
+      <tr>
+        <td class="c">7</td>
+        <td>研修用テキスト (軽減税率)</td>
+        <td class="c">10部</td>
+        <td class="r">¥2,500</td>
+        <td class="r">-</td>
+        <td class="r">¥25,000</td>
+        <td class="c">8%※</td>
+      </tr>
+      <tr>
+        <td class="c">8</td>
+        <td>運用保守 (初月無料分控除)</td>
+        <td class="c">1月</td>
+        <td class="r">¥60,000</td>
+        <td class="r discount">-¥60,000</td>
+        <td class="r">¥0</td>
+        <td class="c">10%</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size: 11px; color: #888;">※ 軽減税率(8%)対象</p>
+
+  <table class="subtotals">
+    <tr><td>税抜合計 (10%対象)</td><td class="r">¥640,000</td></tr>
+    <tr><td>税抜合計 (8%対象)</td><td class="r">¥25,000</td></tr>
+    <tr><td>小計</td><td class="r">¥665,000</td></tr>
+    <tr><td>消費税 (10%)</td><td class="r">¥64,000</td></tr>
+    <tr><td>消費税 (8%)</td><td class="r">¥2,000</td></tr>
+    <tr class="grand"><td>ご請求金額</td><td class="r">¥731,000</td></tr>
+  </table>
+
+  <div class="footer">
+    <p>備考: フロントエンド開発は長期契約割引適用。負荷テストは2回目割引。運用保守は初月無料キャンペーン適用。</p>
+    <p>お振込先: 三井住友銀行 新宿支店 普通 2468135 アイティプロフェッショナル（カ</p>
+  </div>
+</body>
+</html>

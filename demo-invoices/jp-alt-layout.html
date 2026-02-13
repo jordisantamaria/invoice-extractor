@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; margin: 40px; background: white; color: #333; width: 800px; }
+  .title-bar { background: #2c3e50; color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+  .title-bar h1 { margin: 0; font-size: 24px; letter-spacing: 8px; }
+  .title-bar .num { font-size: 14px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 25px 0; padding: 0 10px; }
+  .info-box { border: 1px solid #ddd; padding: 15px; border-radius: 4px; }
+  .info-box h3 { margin: 0 0 8px; font-size: 14px; color: #888; }
+  .info-box p { margin: 3px 0; font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+  thead { background: #2c3e50; color: white; }
+  th { padding: 10px; text-align: left; }
+  td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+  .r { text-align: right; }
+  .tax-note { font-size: 12px; color: #888; }
+  .summary { background: #f8f9fa; padding: 20px; margin-top: 20px; border-radius: 4px; }
+  .summary-row { display: flex; justify-content: space-between; padding: 5px 0; }
+  .summary-row.total { font-size: 20px; font-weight: bold; border-top: 2px solid #2c3e50; padding-top: 10px; margin-top: 10px; }
+</style>
+</head>
+<body>
+  <div class="title-bar">
+    <h1>請求書</h1>
+    <span class="num">No. KK-2024-1108</span>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-box">
+      <h3>請求先</h3>
+      <p><strong>グローバルIT株式会社</strong></p>
+      <p>〒100-0005 東京都千代田区丸の内1-1-1</p>
+    </div>
+    <div class="info-box">
+      <h3>請求元</h3>
+      <p><strong>関西コンサルティング合同会社</strong></p>
+      <p>〒530-0001 大阪府大阪市北区梅田2-3-4</p>
+      <p>登録番号: T1234567890123</p>
+    </div>
+  </div>
+
+  <p style="padding: 0 10px; font-size: 14px; color: #666;">発行日: 2024-11-08 ｜ 支払期限: 2024-12-08</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>数量</th>
+        <th class="r">単価</th>
+        <th class="r">金額</th>
+        <th>税率</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>システム開発コンサルティング</td>
+        <td>3日</td>
+        <td class="r">¥80,000</td>
+        <td class="r">¥240,000</td>
+        <td>10%</td>
+      </tr>
+      <tr>
+        <td>要件定義書作成</td>
+        <td>1式</td>
+        <td class="r">¥150,000</td>
+        <td class="r">¥150,000</td>
+        <td>10%</td>
+      </tr>
+      <tr>
+        <td>技術書籍 (軽減税率対象)</td>
+        <td>5冊</td>
+        <td class="r">¥3,000</td>
+        <td class="r">¥15,000</td>
+        <td>8% ※</td>
+      </tr>
+      <tr>
+        <td>会議室飲料 (軽減税率対象)</td>
+        <td>10本</td>
+        <td class="r">¥200</td>
+        <td class="r">¥2,000</td>
+        <td>8% ※</td>
+      </tr>
+      <tr>
+        <td>交通費実費</td>
+        <td>3回</td>
+        <td class="r">¥2,500</td>
+        <td class="r">¥7,500</td>
+        <td>10%</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tax-note">※ 軽減税率(8%)対象品目</p>
+
+  <div class="summary">
+    <div class="summary-row"><span>小計</span><span>¥414,500</span></div>
+    <div class="summary-row"><span>10%対象 消費税</span><span>¥39,750</span></div>
+    <div class="summary-row"><span>8%対象 消費税</span><span>¥1,360</span></div>
+    <div class="summary-row total"><span>合計</span><span>¥455,610</span></div>
+  </div>
+
+  <p style="margin-top: 30px; font-size: 13px; color: #666;">振込先: 三菱UFJ銀行 梅田支店 普通 9876543 カンサイコンサルティング（ド</p>
+</body>
+</html>

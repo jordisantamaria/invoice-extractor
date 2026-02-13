@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; margin: 40px; background: white; color: #333; width: 800px; }
+  h1 { text-align: center; font-size: 28px; margin-bottom: 5px; }
+  .subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 30px; }
+  .header { display: flex; justify-content: space-between; margin: 20px 0; }
+  .vendor h2 { margin: 0; font-size: 16px; }
+  .meta { color: #666; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  th { background: #4a7c59; color: white; padding: 10px; text-align: left; font-size: 13px; }
+  td { padding: 9px; border-bottom: 1px solid #ddd; font-size: 14px; }
+  .r { text-align: right; }
+  .totals { width: 280px; margin-left: auto; margin-top: 15px; }
+  .totals td { border: none; padding: 5px 10px; }
+  .totals tr:last-child { font-weight: bold; font-size: 18px; border-top: 2px solid #4a7c59; }
+</style>
+</head>
+<body>
+  <h1>請求書</h1>
+  <p class="subtitle">INVOICE</p>
+
+  <div class="header">
+    <div>
+      <h3 style="margin:0;">デジタルマーケティング合同会社 御中</h3>
+      <p class="meta">〒153-0064 東京都目黒区下目黒1-8-1</p>
+    </div>
+    <div style="text-align:right;">
+      <div class="vendor"><h2>佐藤会計事務所</h2></div>
+      <p class="meta">〒141-0031 東京都品川区西五反田2-1-1</p>
+      <p class="meta">TEL: 03-9876-5432</p>
+    </div>
+  </div>
+
+  <p class="meta">請求書番号: SA-2024-0156</p>
+  <p class="meta">発行日: 2024-12-01</p>
+  <p class="meta">支払期限: 2024-12-31</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>サービス内容</th>
+        <th class="r">数量</th>
+        <th class="r">単価</th>
+        <th class="r">金額</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>月次決算サポート (11月分)</td>
+        <td class="r">1</td>
+        <td class="r">¥30,000</td>
+        <td class="r">¥30,000</td>
+      </tr>
+      <tr>
+        <td>給与計算代行</td>
+        <td class="r">1</td>
+        <td class="r">¥20,000</td>
+        <td class="r">¥20,000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ERROR: Tax is calculated at 12% instead of 10% -->
+  <table class="totals">
+    <tr>
+      <td>小計</td>
+      <td class="r">¥50,000</td>
+    </tr>
+    <tr>
+      <td>消費税 (12%)</td>
+      <td class="r">¥6,000</td>
+    </tr>
+    <tr>
+      <td>合計</td>
+      <td class="r">¥56,000</td>
+    </tr>
+  </table>
+
+  <p class="meta" style="margin-top: 30px;">お振込先: りそな銀行 五反田支店 普通 3456789 サトウカイケイジムショ</p>
+</body>
+</html>

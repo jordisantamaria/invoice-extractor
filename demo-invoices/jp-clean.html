@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Yu Gothic', sans-serif; margin: 40px; background: white; color: #333; width: 800px; }
+  h1 { text-align: center; font-size: 28px; border-bottom: 3px double #333; padding-bottom: 10px; }
+  .header { display: flex; justify-content: space-between; margin: 30px 0; }
+  .vendor { text-align: right; }
+  .vendor h2 { margin: 0; font-size: 18px; }
+  .client h3 { margin: 0; font-size: 16px; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  th { background: #f0f0f0; padding: 10px; text-align: left; border: 1px solid #ccc; }
+  td { padding: 10px; border: 1px solid #ccc; }
+  .amount { text-align: right; }
+  .totals { margin-left: auto; width: 300px; margin-top: 20px; }
+  .totals tr td { border: none; padding: 5px 10px; }
+  .totals tr:last-child { font-weight: bold; font-size: 18px; border-top: 2px solid #333; }
+  .meta { color: #666; font-size: 14px; }
+  .stamp { color: #c00; border: 2px solid #c00; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 14px; margin-left: auto; }
+</style>
+</head>
+<body>
+  <h1>請 求 書</h1>
+  <div class="header">
+    <div class="client">
+      <h3>株式会社テクノソリューション 御中</h3>
+      <p class="meta">〒150-0001 東京都渋谷区神宮前1-2-3</p>
+    </div>
+    <div class="vendor">
+      <h2>山田デザイン事務所</h2>
+      <p class="meta">〒106-0032 東京都港区六本木4-5-6</p>
+      <p class="meta">TEL: 03-1234-5678</p>
+      <div class="stamp">山田</div>
+    </div>
+  </div>
+  <p class="meta">請求書番号: INV-2024-0042</p>
+  <p class="meta">発行日: 2024-11-15</p>
+  <p class="meta">お支払期限: 2024-12-15</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>品目</th>
+        <th>数量</th>
+        <th>単価</th>
+        <th class="amount">金額</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ウェブサイトデザイン</td>
+        <td>1</td>
+        <td class="amount">¥50,000</td>
+        <td class="amount">¥50,000</td>
+      </tr>
+      <tr>
+        <td>ロゴ制作</td>
+        <td>1</td>
+        <td class="amount">¥20,000</td>
+        <td class="amount">¥20,000</td>
+      </tr>
+      <tr>
+        <td>バナー画像作成</td>
+        <td>2</td>
+        <td class="amount">¥5,000</td>
+        <td class="amount">¥10,000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tr>
+      <td>小計</td>
+      <td class="amount">¥80,000</td>
+    </tr>
+    <tr>
+      <td>消費税 (10%)</td>
+      <td class="amount">¥8,000</td>
+    </tr>
+    <tr>
+      <td>合計</td>
+      <td class="amount">¥88,000</td>
+    </tr>
+  </table>
+
+  <p class="meta" style="margin-top: 40px;">お振込先: みずほ銀行 六本木支店 普通 1234567 ヤマダデザインジムショ</p>
+</body>
+</html>
