@@ -12,9 +12,21 @@ const keyFor = (id: string) => `invoice:${id}`;
 
 // Lazy singleton so importing this module never throws at build time when the
 // env vars are absent — the client is only created on first actual use.
+// Accepts either naming convention: the Upstash integration may inject
+// UPSTASH_REDIS_REST_* or the legacy Vercel KV_REST_API_* names.
 let redisClient: Redis | null = null;
 function redis(): Redis {
-  if (!redisClient) redisClient = Redis.fromEnv();
+  if (!redisClient) {
+    const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
+    const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
+    if (!url || !token) {
+      throw new Error(
+        "Missing Upstash Redis credentials: set UPSTASH_REDIS_REST_URL/_TOKEN " +
+          "(or KV_REST_API_URL/_TOKEN).",
+      );
+    }
+    redisClient = new Redis({ url, token });
+  }
   return redisClient;
 }
 
