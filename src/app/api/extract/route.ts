@@ -66,21 +66,26 @@ export async function POST(req: NextRequest) {
     const message = error instanceof Error ? error.message : "Unknown error";
 
     // Persist a "failed" record if we got far enough, so the results page can
-    // render a clear error instead of breaking.
+    // render a clear error instead of breaking. Guard the store call so a Redis
+    // outage falls through to a clean 500 rather than a raw throw.
     if (id) {
-      await setInvoice({
-        id,
-        status: "failed",
-        data: EMPTY_INVOICE_DATA,
-        imageBase64,
-        imageMimeType,
-        textContent,
-        modelUsed: "error",
-        validationErrors: [message],
-        cascaded: false,
-        createdAt: new Date().toISOString(),
-      });
-      return NextResponse.json({ id, status: "failed" });
+      try {
+        await setInvoice({
+          id,
+          status: "failed",
+          data: EMPTY_INVOICE_DATA,
+          imageBase64,
+          imageMimeType,
+          textContent,
+          modelUsed: "error",
+          validationErrors: [message],
+          cascaded: false,
+          createdAt: new Date().toISOString(),
+        });
+        return NextResponse.json({ id, status: "failed" });
+      } catch (storeError) {
+        console.error("Failed to persist failed-state record:", storeError);
+      }
     }
 
     return NextResponse.json(
