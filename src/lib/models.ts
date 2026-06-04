@@ -1,6 +1,6 @@
 export const MODELS = {
-  fast: "gpt-4o-mini" as const,
-  accurate: "gpt-4o" as const,
+  fast: "claude-haiku-4-5-20251001" as const,
+  accurate: "claude-sonnet-4-6" as const,
 };
 
 export const AUTO_APPROVE_THRESHOLD = 100_000; // ¥100,000

@@ -1,5 +1,5 @@
 import { generateObject } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { anthropic } from "@ai-sdk/anthropic";
 import { invoiceDataSchema, InvoiceData, InvoiceStatus } from "./schema";
 import { MODELS, AUTO_APPROVE_THRESHOLD } from "./models";
 import { validateInvoice } from "./validate";
@@ -44,7 +44,7 @@ async function extractFromVision(
     : "Extract all invoice data from this document.";
 
   const { object } = await generateObject({
-    model: openai(model),
+    model: anthropic(model),
     schema: invoiceDataSchema,
     system: SYSTEM_PROMPT,
     messages: [
@@ -71,7 +71,7 @@ async function extractFromText(
     : `Extract all invoice data from this spreadsheet/CSV content:\n\n${textContent}`;
 
   const { object } = await generateObject({
-    model: openai(model),
+    model: anthropic(model),
     schema: invoiceDataSchema,
     system: SYSTEM_PROMPT,
     prompt: userText,
