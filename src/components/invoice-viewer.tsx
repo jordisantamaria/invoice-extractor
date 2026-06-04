@@ -8,11 +8,16 @@ import { ZoomIn, ZoomOut } from "lucide-react";
 export function InvoiceViewer({
   imageBase64,
   imageMimeType,
+  imageUrl,
 }: {
   imageBase64: string;
   imageMimeType: string;
+  imageUrl?: string;
 }) {
   const [zoom, setZoom] = useState(1);
+
+  // Prefer a public URL (demo invoices) over an inlined base64 data URI (uploads).
+  const imageSrc = imageUrl || `data:${imageMimeType};base64,${imageBase64}`;
 
   return (
     <Card className="overflow-hidden">
@@ -54,7 +59,7 @@ export function InvoiceViewer({
           </object>
         ) : (
           <img
-            src={`data:${imageMimeType};base64,${imageBase64}`}
+            src={imageSrc}
             alt="Invoice"
             style={{ transform: `scale(${zoom})`, transformOrigin: "top left" }}
             className="transition-transform"

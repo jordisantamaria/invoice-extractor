@@ -1,38 +1,68 @@
+import { Redis } from "@upstash/redis";
 import { StoredInvoice } from "./schema";
 
-// Persist across hot-reloads in development
-const globalStore = globalThis as unknown as {
-  __invoiceStore?: Map<string, StoredInvoice>;
-};
+// Serverless-friendly store backed by Upstash Redis (HTTP). On Vercel, add the
+// Upstash integration and it injects UPSTASH_REDIS_REST_URL / _TOKEN.
+//
+// Records expire after TTL_SECONDS so the demo self-cleans. An ordered index
+// (sorted set, scored by createdAt) backs the dashboard listing.
+const TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
+const INDEX_KEY = "invoices:index";
+const keyFor = (id: string) => `invoice:${id}`;
 
-if (!globalStore.__invoiceStore) {
-  globalStore.__invoiceStore = new Map<string, StoredInvoice>();
+// Lazy singleton so importing this module never throws at build time when the
+// env vars are absent — the client is only created on first actual use.
+let redisClient: Redis | null = null;
+function redis(): Redis {
+  if (!redisClient) redisClient = Redis.fromEnv();
+  return redisClient;
 }
-
-const store = globalStore.__invoiceStore;
 
 export function generateId(): string {
   return `inv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function setInvoice(invoice: StoredInvoice): void {
-  store.set(invoice.id, invoice);
+export async function setInvoice(invoice: StoredInvoice): Promise<void> {
+  const r = redis();
+  await r.set(keyFor(invoice.id), invoice, { ex: TTL_SECONDS });
+  await r.zadd(INDEX_KEY, {
+    score: new Date(invoice.createdAt).getTime(),
+    member: invoice.id,
+  });
 }
 
-export function getInvoice(id: string): StoredInvoice | undefined {
-  return store.get(id);
+export async function getInvoice(id: string): Promise<StoredInvoice | undefined> {
+  // @upstash/redis auto-deserializes JSON values written via `set`.
+  const record = await redis().get<StoredInvoice>(keyFor(id));
+  return record ?? undefined;
 }
 
-export function getAllInvoices(): StoredInvoice[] {
-  return Array.from(store.values()).sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+export async function getAllInvoices(): Promise<StoredInvoice[]> {
+  const r = redis();
+  const ids = await r.zrange<string[]>(INDEX_KEY, 0, -1, { rev: true });
+  if (!ids || ids.length === 0) return [];
+
+  const records = await r.mget<StoredInvoice[]>(...ids.map(keyFor));
+
+  const invoices: StoredInvoice[] = [];
+  const expired: string[] = [];
+  records.forEach((record, i) => {
+    if (record) invoices.push(record);
+    else expired.push(ids[i]); // record TTL'd out — drop it from the index
+  });
+
+  if (expired.length > 0) await r.zrem(INDEX_KEY, ...expired);
+
+  return invoices;
 }
 
-export function updateInvoice(id: string, updates: Partial<StoredInvoice>): StoredInvoice | undefined {
-  const existing = store.get(id);
+export async function updateInvoice(
+  id: string,
+  updates: Partial<StoredInvoice>,
+): Promise<StoredInvoice | undefined> {
+  const existing = await getInvoice(id);
   if (!existing) return undefined;
   const updated = { ...existing, ...updates };
-  store.set(id, updated);
+  await setInvoice(updated);
   return updated;
 }

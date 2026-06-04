@@ -98,11 +98,30 @@ export default function ResultsPage() {
           <InvoiceViewer
             imageBase64={invoice.imageBase64}
             imageMimeType={invoice.imageMimeType}
+            imageUrl={invoice.imageUrl}
           />
         )}
 
         {isProcessing ? (
           <ProcessingIndicator />
+        ) : invoice.status === "failed" ? (
+          <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-5">
+            <h2 className="text-lg font-semibold text-destructive">Extraction failed</h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              The document could not be processed. This usually means the AI model
+              call failed (e.g. a missing or invalid API key).
+            </p>
+            {invoice.validationErrors.length > 0 && (
+              <ul className="mt-3 list-disc list-inside text-sm text-destructive/90 space-y-1">
+                {invoice.validationErrors.map((err, i) => (
+                  <li key={i}>{err}</li>
+                ))}
+              </ul>
+            )}
+            <Button asChild variant="outline" size="sm" className="mt-4">
+              <Link href="/">Try another invoice</Link>
+            </Button>
+          </div>
         ) : (
           <ExtractedDataCard
             id={invoice.id}

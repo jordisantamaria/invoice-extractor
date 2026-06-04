@@ -30,7 +30,28 @@ export const invoiceDataSchema = z.object({
 export type LineItem = z.infer<typeof lineItemSchema>;
 export type InvoiceData = z.infer<typeof invoiceDataSchema>;
 
-export type InvoiceStatus = "processing" | "auto-approved" | "needs-review" | "approved" | "corrected";
+export type InvoiceStatus = "processing" | "auto-approved" | "needs-review" | "approved" | "corrected" | "failed";
+
+/**
+ * Safe placeholder used while an invoice is still processing or when extraction
+ * fails. Every field is present (notably `items: []`) so UI components that read
+ * `data.items.map(...)` never crash on partial/empty data.
+ */
+export const EMPTY_INVOICE_DATA: InvoiceData = {
+  vendorName: "",
+  vendorAddress: null,
+  invoiceNumber: null,
+  invoiceDate: null,
+  dueDate: null,
+  items: [],
+  subtotal: 0,
+  taxAmount: 0,
+  taxRate: null,
+  total: 0,
+  currency: "",
+  language: "other",
+  notes: null,
+};
 
 export interface StoredInvoice {
   id: string;
@@ -38,6 +59,8 @@ export interface StoredInvoice {
   data: InvoiceData;
   imageBase64: string;
   imageMimeType: string;
+  /** Public URL for the original image (used by demo invoices instead of base64) */
+  imageUrl?: string;
   /** Plain-text representation for spreadsheet uploads (CSV/Excel) */
   textContent?: string;
   modelUsed: string;

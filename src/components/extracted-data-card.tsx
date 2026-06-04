@@ -122,7 +122,7 @@ export function ExtractedDataCard({ id, data, status, modelUsed, cascaded, valid
         <div>
           <h3 className="text-sm font-medium mb-2">Line Items</h3>
           <div className="space-y-2">
-            {(editing ? editData : data).items.map((item, i) => (
+            {((editing ? editData : data).items ?? []).map((item, i) => (
               <div key={i} className="grid grid-cols-[1fr_60px_80px_80px] gap-2 text-sm items-center">
                 {editing ? (
                   <>

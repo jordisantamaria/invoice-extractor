@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const invoice = getInvoice(id);
+  const invoice = await getInvoice(id);
 
   if (!invoice) {
     return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
@@ -21,7 +21,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const invoice = getInvoice(id);
+  const invoice = await getInvoice(id);
 
   if (!invoice) {
     return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
@@ -37,6 +37,6 @@ export async function PATCH(
     updates.status = "corrected";
   }
 
-  const updated = updateInvoice(id, updates);
+  const updated = await updateInvoice(id, updates);
   return NextResponse.json(updated);
 }
