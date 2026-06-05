@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { StatusBadge } from "@/components/status-badge";
 import { ValidationWarnings } from "@/components/validation-warnings";
 import { Check, Pencil, Save, X, Cpu } from "lucide-react";
-import type { InvoiceData, InvoiceStatus } from "@/lib/schema";
+import type { InvoiceData, InvoiceStatus, StoredInvoice } from "@/lib/schema";
 
 interface Props {
   id: string;
@@ -19,35 +18,42 @@ interface Props {
   modelUsed: string;
   cascaded: boolean;
   validationErrors: string[];
+  /** Called with the updated record after approve/save so the parent refreshes. */
+  onUpdated: (invoice: StoredInvoice) => void;
 }
 
-export function ExtractedDataCard({ id, data, status, modelUsed, cascaded, validationErrors }: Props) {
-  const router = useRouter();
+export function ExtractedDataCard({ id, data, status, modelUsed, cascaded, validationErrors, onUpdated }: Props) {
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editData, setEditData] = useState(data);
 
   async function handleApprove() {
     setSaving(true);
-    await fetch(`/api/invoices/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "approved" }),
-    });
-    router.refresh();
-    setSaving(false);
+    try {
+      const res = await fetch(`/api/invoices/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "approved" }),
+      });
+      if (res.ok) onUpdated(await res.json());
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function handleSave() {
     setSaving(true);
-    await fetch(`/api/invoices/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: editData }),
-    });
-    setEditing(false);
-    router.refresh();
-    setSaving(false);
+    try {
+      const res = await fetch(`/api/invoices/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: editData }),
+      });
+      if (res.ok) onUpdated(await res.json());
+      setEditing(false);
+    } finally {
+      setSaving(false);
+    }
   }
 
   function updateField(field: keyof InvoiceData, value: string | number) {
@@ -81,7 +87,7 @@ export function ExtractedDataCard({ id, data, status, modelUsed, cascaded, valid
         </div>
         {isReviewable && !editing && (
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
+            <Button variant="outline" size="sm" onClick={() => { setEditData(data); setEditing(true); }}>
               <Pencil className="h-3.5 w-3.5 mr-1" />
               Edit
             </Button>

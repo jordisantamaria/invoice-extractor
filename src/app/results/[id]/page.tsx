@@ -117,6 +117,7 @@ export default function ResultsPage() {
             modelUsed={invoice.modelUsed}
             cascaded={invoice.cascaded}
             validationErrors={invoice.validationErrors}
+            onUpdated={setInvoice}
           />
         )}
       </div>
