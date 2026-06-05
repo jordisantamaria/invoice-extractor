@@ -30,7 +30,7 @@ export const invoiceDataSchema = z.object({
 export type LineItem = z.infer<typeof lineItemSchema>;
 export type InvoiceData = z.infer<typeof invoiceDataSchema>;
 
-export type InvoiceStatus = "processing" | "auto-approved" | "needs-review" | "approved" | "corrected" | "failed";
+export type InvoiceStatus = "processing" | "auto-approved" | "needs-review" | "approved" | "failed";
 
 /**
  * Safe placeholder used while an invoice is still processing or when extraction

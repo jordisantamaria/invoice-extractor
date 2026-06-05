@@ -8,7 +8,6 @@ const statusConfig: Record<InvoiceStatus, { label: string; variant: "default" | 
   "auto-approved": { label: "Auto-Approved", variant: "default" },
   "needs-review": { label: "Needs Review", variant: "destructive" },
   approved: { label: "Approved", variant: "default" },
-  corrected: { label: "Corrected", variant: "outline" },
   failed: { label: "Failed", variant: "destructive" },
 };
 

@@ -33,8 +33,9 @@ export async function PATCH(
   if (body.status === "approved") {
     updates.status = "approved";
   } else if (body.data) {
+    // Saving edits persists the data but leaves the review status unchanged —
+    // the user finalizes explicitly with Approve.
     updates.data = body.data;
-    updates.status = "corrected";
   }
 
   const updated = await updateInvoice(id, updates);

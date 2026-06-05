@@ -35,19 +35,17 @@ export default function DashboardPage() {
     autoApproved: invoices.filter((i) => i.status === "auto-approved").length,
     needsReview: invoices.filter((i) => i.status === "needs-review").length,
     approved: invoices.filter((i) => i.status === "approved").length,
-    corrected: invoices.filter((i) => i.status === "corrected").length,
   };
 
   return (
     <div className="container mx-auto max-w-5xl py-8 px-4">
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         <StatCard label="Total" value={stats.total} />
         <StatCard label="Auto-Approved" value={stats.autoApproved} />
         <StatCard label="Needs Review" value={stats.needsReview} />
         <StatCard label="Approved" value={stats.approved} />
-        <StatCard label="Corrected" value={stats.corrected} />
       </div>
 
       {loading ? (
