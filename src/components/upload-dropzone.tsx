@@ -31,7 +31,7 @@ export function UploadDropzone() {
         }
 
         const { id } = await res.json();
-        // Extraction has already completed server-side; the results page just renders it.
+        // Redirect immediately — results page polls while extraction runs.
         router.push(`/results/${id}`);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Upload failed");
@@ -91,7 +91,7 @@ export function UploadDropzone() {
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
           <p className="text-sm text-muted-foreground">
-            Extracting data… this can take 10–30s
+            Uploading...
           </p>
         </div>
       ) : (

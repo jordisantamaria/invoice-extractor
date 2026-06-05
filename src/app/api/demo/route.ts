@@ -1,18 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { extractInvoice } from "@/lib/extract";
 import { generateId, setInvoice } from "@/lib/store";
 import { EMPTY_INVOICE_DATA } from "@/lib/schema";
 import fs from "fs/promises";
 import path from "path";
 
-// Allow time for the (cascading) model call to finish within the request.
+// Allow time for the (cascading) model call to finish in the after() callback.
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
-  let id: string | null = null;
-  let imageUrl = "";
-  const imageMimeType = "image/png";
-
   try {
     const { filename } = await req.json();
 
@@ -26,39 +22,50 @@ export async function POST(req: NextRequest) {
 
     const imageBuffer = await fs.readFile(imagePath);
     const imageBase64 = imageBuffer.toString("base64");
-    // Demo images are static assets — reference them by public URL so we don't
-    // bloat the store with base64 (the viewer reads imageUrl when present).
-    imageUrl = `/demo-invoices/${safeName}`;
+    // Demo images are static assets — reference them by public URL (the viewer
+    // reads imageUrl when present) so we don't bloat the store with base64.
+    const imageUrl = `/demo-invoices/${safeName}`;
+    const imageMimeType = "image/png";
 
-    id = generateId();
+    const id = generateId();
+    const createdAt = new Date().toISOString();
 
-    // Extract synchronously: the work runs inside the request so it completes
-    // and is persisted before we respond (serverless has no reliable background).
-    const result = await extractInvoice(imageBase64, imageMimeType);
-
+    // Persist a "processing" record immediately so the results page can poll
+    // and show the progress UI while extraction runs.
     await setInvoice({
       id,
-      status: result.status,
-      data: result.data,
+      status: "processing",
+      data: EMPTY_INVOICE_DATA,
       imageBase64: "",
       imageMimeType,
       imageUrl,
-      modelUsed: result.modelUsed,
-      validationErrors: result.validationErrors,
-      cascaded: result.cascaded,
-      createdAt: new Date().toISOString(),
+      modelUsed: "",
+      validationErrors: [],
+      cascaded: false,
+      createdAt,
     });
 
-    return NextResponse.json({ id, status: result.status });
-  } catch (error) {
-    console.error("Demo extraction error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-
-    // If we already created an id, persist a "failed" record so the results
-    // page can render a clear error instead of breaking. Guard the store call
-    // so a Redis outage falls through to a clean 500 rather than a raw throw.
-    if (id) {
+    // Run extraction AFTER responding. On Vercel, after() keeps the function
+    // alive until this completes (up to maxDuration) — the supported way to do
+    // post-response work without an unreliable fire-and-forget promise.
+    after(async () => {
       try {
+        const result = await extractInvoice(imageBase64, imageMimeType);
+        await setInvoice({
+          id,
+          status: result.status,
+          data: result.data,
+          imageBase64: "",
+          imageMimeType,
+          imageUrl,
+          modelUsed: result.modelUsed,
+          validationErrors: result.validationErrors,
+          cascaded: result.cascaded,
+          createdAt,
+        });
+      } catch (error) {
+        console.error("Demo extraction error:", error);
+        const message = error instanceof Error ? error.message : "Unknown error";
         await setInvoice({
           id,
           status: "failed",
@@ -69,14 +76,15 @@ export async function POST(req: NextRequest) {
           modelUsed: "error",
           validationErrors: [message],
           cascaded: false,
-          createdAt: new Date().toISOString(),
-        });
-        return NextResponse.json({ id, status: "failed" });
-      } catch (storeError) {
-        console.error("Failed to persist failed-state record:", storeError);
+          createdAt,
+        }).catch((e) => console.error("Failed to persist failed-state record:", e));
       }
-    }
+    });
 
+    return NextResponse.json({ id, status: "processing" });
+  } catch (error) {
+    console.error("Demo route error:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
       { error: "Failed to process demo invoice", detail: message },
       { status: 500 },

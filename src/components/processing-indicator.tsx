@@ -6,10 +6,10 @@ import { Loader2 } from "lucide-react";
 
 const STEPS = [
   { label: "Uploading document", threshold: 0 },
-  { label: "Analyzing with GPT-4o mini", threshold: 5 },
+  { label: "Analyzing with Claude Haiku", threshold: 5 },
   { label: "Extracting structured data", threshold: 15 },
   { label: "Validating math and tax rates", threshold: 30 },
-  { label: "Cascading to GPT-4o (validation failed)", threshold: 60 },
+  { label: "Cascading to Claude Sonnet (validation failed)", threshold: 60 },
   { label: "Re-extracting with error hints", threshold: 90 },
   { label: "Finalizing results", threshold: 120 },
 ];
