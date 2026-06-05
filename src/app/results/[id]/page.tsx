@@ -9,6 +9,8 @@ import { ExtractedDataCard } from "@/components/extracted-data-card";
 import { ProcessingIndicator } from "@/components/processing-indicator";
 import { isSpreadsheet } from "@/lib/spreadsheet-to-text";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import type { StoredInvoice } from "@/lib/schema";
 
@@ -54,8 +56,6 @@ export default function ResultsPage() {
     };
   }, [fetchInvoice]);
 
-  const isProcessing = invoice?.status === "processing";
-
   if (error) {
     return (
       <div className="container mx-auto max-w-4xl py-8 px-4 text-center">
@@ -67,13 +67,10 @@ export default function ResultsPage() {
     );
   }
 
-  if (!invoice) {
-    return (
-      <div className="container mx-auto max-w-4xl py-12 px-4">
-        <ProcessingIndicator />
-      </div>
-    );
-  }
+  // Treat "no invoice yet" (initial fetch in flight) the same as "processing"
+  // so we render the stable two-column layout immediately — no full-screen
+  // spinner, no layout jump.
+  const isProcessing = !invoice || invoice.status === "processing";
 
   return (
     <div className="container mx-auto max-w-6xl py-8 px-4">
@@ -90,22 +87,12 @@ export default function ResultsPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {isSpreadsheet(invoice.imageMimeType) ? (
-          <SpreadsheetViewer textContent={invoice.textContent ?? ""} />
-        ) : invoice.imageMimeType === "application/pdf" ? (
-          <PdfViewer base64={invoice.imageBase64} />
-        ) : (
-          <InvoiceViewer
-            imageBase64={invoice.imageBase64}
-            imageMimeType={invoice.imageMimeType}
-            imageUrl={invoice.imageUrl}
-          />
-        )}
+        <DocumentPanel invoice={invoice} />
 
         {isProcessing ? (
           <ProcessingIndicator />
         ) : invoice.status === "failed" ? (
-          <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-5">
+          <Card className="p-5 border-destructive/30 bg-destructive/5">
             <h2 className="text-lg font-semibold text-destructive">Extraction failed</h2>
             <p className="text-sm text-muted-foreground mt-1">
               The document could not be processed. This usually means the AI model
@@ -121,7 +108,7 @@ export default function ResultsPage() {
             <Button asChild variant="outline" size="sm" className="mt-4">
               <Link href="/">Try another invoice</Link>
             </Button>
-          </div>
+          </Card>
         ) : (
           <ExtractedDataCard
             id={invoice.id}
@@ -134,5 +121,43 @@ export default function ResultsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+/**
+ * Left column: the original document. Shows the real viewer as soon as the
+ * invoice record is available (which carries imageUrl/base64/textContent even
+ * while extraction is still running), and a contained placeholder before that
+ * — never a full-screen spinner, so the layout stays put.
+ */
+function DocumentPanel({ invoice }: { invoice: StoredInvoice | null }) {
+  if (!invoice) {
+    return (
+      <Card className="overflow-hidden">
+        <div className="flex items-center justify-between p-3 border-b">
+          <span className="text-sm font-medium">Original Invoice</span>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-3 h-[700px] bg-muted/30 text-muted-foreground">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          <p className="text-sm">Loading document…</p>
+        </div>
+      </Card>
+    );
+  }
+
+  if (isSpreadsheet(invoice.imageMimeType)) {
+    return <SpreadsheetViewer textContent={invoice.textContent ?? ""} />;
+  }
+
+  if (invoice.imageMimeType === "application/pdf") {
+    return <PdfViewer base64={invoice.imageBase64} />;
+  }
+
+  return (
+    <InvoiceViewer
+      imageBase64={invoice.imageBase64}
+      imageMimeType={invoice.imageMimeType}
+      imageUrl={invoice.imageUrl}
+    />
   );
 }
