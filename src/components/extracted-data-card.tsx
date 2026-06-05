@@ -69,7 +69,10 @@ export function ExtractedDataCard({ id, data, status, modelUsed, cascaded, valid
     }));
   }
 
-  const isReviewable = status === "needs-review" || status === "auto-approved";
+  // Everything except a final "approved" (and the non-data states) can still be
+  // edited/approved — including "corrected", so a saved correction isn't a dead end.
+  const isReviewable =
+    status === "needs-review" || status === "auto-approved" || status === "corrected";
 
   return (
     <Card className="p-5">
